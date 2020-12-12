@@ -1,7 +1,7 @@
 <template>
     <div>
         <hr style="opacity: 0;border-style: none;"/>
-        <button class="btn btn-primary btn-sm" type="button" style="margin-right: 20px;">添加</button>
+        <button class="btn btn-primary btn-sm" type="button" style="margin-right: 20px;" @click="addRow()">添加</button>
         <hr style="opacity: 0;border-style: none;"/>
         <div class="table-responsive">
             <table class="table table-sm table-striped">
@@ -20,10 +20,18 @@
                         <input v-else type="number" class="form-control-sm" v-bind:value="lines[index][k]"/>
                     </td>
                     <td>
-                        <i class="typcn typcn-social-vimeo-circular" data-toggle="tooltip" style="color: var(--green);font-size: 25px;" title="保存数据" v-if="lineIsEdit[index]"></i>
-                        <i class="typcn typcn-edit" data-toggle="tooltip" style="color: var(--blue);font-size: 25px;" title="编辑数据" v-if="!lineIsEdit[index]" @click="reverseEditStatus(index)"></i>
-                        <i class="typcn typcn-delete" data-toggle="tooltip" style="color: var(--danger);font-size: 25px;" title="删除整行" v-if="!lineIsEdit[index]"></i>
-                        <i class="typcn typcn-arrow-back-outline" data-toggle="tooltip" title="取消" style="color: var(--primary);font-size: 25px;" v-if="lineIsEdit[index]" @click="reverseEditStatus(index)"></i>
+                        <i class="typcn typcn-arrow-back-outline" data-toggle="tooltip" title="取消"
+                           style="color: var(--primary);font-size: 25px;cursor:pointer;" v-if="lineIsEdit[index]"
+                           @click="reverseEditStatus(index)"></i>
+                        <i class="typcn typcn-social-vimeo-circular" data-toggle="tooltip"
+                           style="color: var(--green);font-size: 25px;cursor:pointer;" title="保存数据"
+                           v-if="lineIsEdit[index]"></i>
+                        <i class="typcn typcn-edit" data-toggle="tooltip"
+                           style="color: var(--blue);font-size: 25px;cursor:pointer;" title="编辑数据"
+                           v-if="!lineIsEdit[index]" @click="reverseEditStatus(index)"></i>
+                        <i class="typcn typcn-delete" data-toggle="tooltip"
+                           style="color: var(--danger);font-size: 25px;cursor:pointer;" title="删除整行"
+                           v-if="!lineIsEdit[index]" @click="deleteRow(lines[index],index)"></i>
                     </td>
                 </tr>
                 </tbody>
@@ -36,12 +44,12 @@
     import axios from "axios"
 
     export default {
-        props: ["url"],
+        props: ["dataUrl","saveUrl","delUrl"],
         data() {
             return {
                 columns: {},
                 lines: {},
-                cellClassProperties: new Array(),
+                lineCellClassProperties: new Array(),
                 lineClassProperties: new Array(),
                 lineIsEdit: new Array(),
                 columnType: new Map()
@@ -51,7 +59,7 @@
         created() {
             const self = this;
             axios
-                .get(self.$props.url)
+                .get(self.$props.dataUrl)
                 .then(function (response) {
                     let tableDataList = response.data.data;
                     self.columns = new Set();
@@ -59,7 +67,7 @@
                     for (let k = 0; k < tableDataList.length; k++) {
                         let obj = new Object();
                         // obj，一行数据。i为每个格子的列标题，k为行
-                        self.cellClassProperties[k] = new Object();
+                        let lineCellObj = new Object();
                         for (let i in tableDataList[k]) {
                             // 列去重
                             self.columns.add(i);
@@ -70,13 +78,14 @@
                             // 自定义cell class规则
                             if (i == 'minSalary' && obj[i] > 15) {
                                 // 针对每个格子的值进行样式的判断
-                                self.cellClassProperties[k][i] = "table-danger";
+                                lineCellObj[i] = "table-danger";
                                 // 由格子的值判断行的样式
-                                self.lineClassProperties[k] = "table-success";
+                                // self.lineClassProperties[k] = "table-success";
                             }
                         }
                         self.lines[k] = obj;
                         self.lineIsEdit[k] = false
+                        self.lineCellClassProperties[k] = lineCellObj
                     }
                 })
                 .catch(function (e) {
@@ -85,7 +94,7 @@
         },
         methods: {
             setCellClass: function (r, c) {
-                return this.cellClassProperties[r][c]
+                return this.lineCellClassProperties[r][c]
             },
             setLineClass: function (r) {
                 return this.lineClassProperties[r]
@@ -93,6 +102,27 @@
             reverseEditStatus: function (line) {
                 this.lineIsEdit[line] = !this.lineIsEdit[line]
                 this.$forceUpdate()
+            },
+            addRow: function () {
+                let row = new Object()
+                let old = this.lines[0]
+                for (let i in old) {
+                    row[i] = null
+                }
+                this.lines.unshift(row)
+                this.lineCellClassProperties.unshift(new Object())
+                this.lineIsEdit.unshift(true)
+                this.lineClassProperties.unshift(new Object())
+            },
+            deleteRow: function (line, index) {
+                if (line.id == null || line.id == '') {
+                    this.lines.splice(index, 1)
+                    this.lineCellClassProperties.splice(index, 1)
+                    this.lineIsEdit.splice(index, 1)
+                    this.lineClassProperties.splice(index, 1)
+                } else {
+                    // ajax请求删除
+                }
             }
         }
     }

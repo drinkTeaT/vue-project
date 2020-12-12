@@ -1,8 +1,8 @@
 <template>
     <div class="hello">
         <!--        https://examples.wenzhixin.net.cn/examples/bootstrap_table/data-->
-                <table-with-edit url="http://localhost:8088/boss/data/table/job"></table-with-edit>
-<!--        <simple-table url="http://localhost:8088/boss/data/table/job"></simple-table>-->
+                <table-with-edit dataUrl="http://localhost:8088/boss/data/table/job"></table-with-edit>
+<!--        <simple-table dataUrl="http://localhost:8088/boss/data/table/job"></simple-table>-->
     </div>
 
 </template>
