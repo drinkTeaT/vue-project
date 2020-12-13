@@ -17,7 +17,7 @@
                     <td v-for="(i,k) in line" :key="i" :class="setCellClass(index,k)">
                         <label v-if="k == 'id'">{{lines[index][k]}}</label>
                         <img v-else-if="columnType.get(k) == 'string' && validateImage(lines[index][k])"
-                              :src="lines[index][k]" style="width: 35px;height: 35px;"/>
+                             :src="lines[index][k]" style="width: 35px;height: 35px;"/>
                         <label v-else-if="!lineIsEdit[index]">{{lines[index][k]}}</label>
                         <input v-else-if="columnType.get(k) == 'string'" type="text" v-model="lines[index][k]"/>
                         <input v-else type="number" class="form-control-sm" v-model="lines[index][k]"/>
@@ -160,7 +160,11 @@
                 })
             },
             validateImage: function (url) {
-                return url.match(/\.(jpg|png|gif)/g)
+                if (url == null) {
+                    return false
+                } else {
+                    return url.match(/\.(jpg|png|gif)/g)
+                }
             }
         }
     }
