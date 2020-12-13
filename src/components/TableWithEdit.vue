@@ -13,11 +13,14 @@
                 </thead>
                 <tbody>
                 <tr v-for="(line,index) in lines" :key="index" :class="setLineClass(index)">
-                    <!--index为行，k为列-->
+                    <!--index为行，k为列标题-->
                     <td v-for="(i,k) in line" :key="i" :class="setCellClass(index,k)">
-                        <label v-if="!lineIsEdit[index]">{{lines[index][k]}}</label>
-                        <input v-else-if="columnType.get(k) == 'string'" type="text" v-bind:value="lines[index][k]"/>
-                        <input v-else type="number" class="form-control-sm" v-bind:value="lines[index][k]"/>
+                        <label v-if="k == 'id'">{{lines[index][k]}}</label>
+                        <img v-else-if="columnType.get(k) == 'string' && validateImage(lines[index][k])"
+                              :src="lines[index][k]" style="width: 35px;height: 35px;"/>
+                        <label v-else-if="!lineIsEdit[index]">{{lines[index][k]}}</label>
+                        <input v-else-if="columnType.get(k) == 'string'" type="text" v-model="lines[index][k]"/>
+                        <input v-else type="number" class="form-control-sm" v-model="lines[index][k]"/>
                     </td>
                     <td>
                         <i class="typcn typcn-arrow-back-outline" data-toggle="tooltip" title="取消"
@@ -25,7 +28,7 @@
                            @click="reverseEditStatus(index)"></i>
                         <i class="typcn typcn-social-vimeo-circular" data-toggle="tooltip"
                            style="color: var(--green);font-size: 25px;cursor:pointer;" title="保存数据"
-                           v-if="lineIsEdit[index]"></i>
+                           v-if="lineIsEdit[index]" @click="saveRow(lines[index],index)"></i>
                         <i class="typcn typcn-edit" data-toggle="tooltip"
                            style="color: var(--blue);font-size: 25px;cursor:pointer;" title="编辑数据"
                            v-if="!lineIsEdit[index]" @click="reverseEditStatus(index)"></i>
@@ -44,7 +47,7 @@
     import axios from "axios"
 
     export default {
-        props: ["dataUrl","saveUrl","delUrl"],
+        props: ["dataUrl", "saveUrl", "delUrl"],
         data() {
             return {
                 columns: {},
@@ -56,7 +59,7 @@
             };
         },
         name: "TableWithEdit",
-        created() {
+        mounted() {
             const self = this;
             axios
                 .get(self.$props.dataUrl)
@@ -80,7 +83,7 @@
                                 // 针对每个格子的值进行样式的判断
                                 lineCellObj[i] = "table-danger";
                                 // 由格子的值判断行的样式
-                                // self.lineClassProperties[k] = "table-success";
+                                self.lineClassProperties[k] = "table-success";
                             }
                         }
                         self.lines[k] = obj;
@@ -122,7 +125,42 @@
                     this.lineClassProperties.splice(index, 1)
                 } else {
                     // ajax请求删除
+                    let param = new URLSearchParams();
+                    const self = this;
+                    param.append('id', line.id);
+                    axios
+                        .post(self.$props.delUrl, param)
+                        .then(function (isSuccess) {
+                            if (isSuccess) {
+                                self.lines.splice(index, 1)
+                                self.lineCellClassProperties.splice(index, 1)
+                                self.lineIsEdit.splice(index, 1)
+                                self.lineClassProperties.splice(index, 1)
+                            } else {
+                                alert("删除失败！")
+                            }
+                        })
                 }
+            },
+            saveRow: function (line, index) {
+                const self = this;
+                // ajax请求删除
+                axios
+                    .post(self.$props.saveUrl, line)
+                    .then(function (response) {
+                        if (response.status == 200 && response.data.success) {
+                            self.lines[index] = response.data.data[0]
+                            self.lineIsEdit[index] = false
+                            self.$forceUpdate()
+                        } else {
+                            alert("保存失败！可能原因是没有该行没有值。")
+                        }
+                    }).catch(function () {
+                    alert("保存失败！可能原因是该行没有值。")
+                })
+            },
+            validateImage: function (url) {
+                return url.match(/\.(jpg|png|gif)/g)
             }
         }
     }
