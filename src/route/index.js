@@ -1,6 +1,7 @@
 import Vue from "vue"
 import Router from "vue-router"
-import HelloWorld from "@/components/HelloWorld";
+import ComponentB from "../components/test/ComponentB";
+import 父子通信 from "../components/test/父子通信";
 
 Vue.use(Router)
 
@@ -9,7 +10,12 @@ export default new Router({
         {
             path: "/data",
             name: 'data',
-            component: HelloWorld
+            component: 父子通信
+        },
+        {
+            path: "/",
+            name: "test",
+            component: ComponentB
         }
     ]
 })
