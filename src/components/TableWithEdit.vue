@@ -1,50 +1,51 @@
 <template>
-  <div>
-    <hr style="opacity: 0;border-style: none;"/>
-    <button class="btn btn-primary btn-sm" type="button" style="margin-right: 20px;" @click="addRow()">添加</button>
-    <hr style="opacity: 0;border-style: none;"/>
-    <div class="table-responsive">
-      <table class="table table-sm table-striped">
-        <thead>
-        <tr>
-          <th v-for="(column,index) in columns" :key="index">{{ column }}</th>
-          <th>操作</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr v-for="(line,index) in lines" :key="index" :class="setLineClass(index)">
-          <!--index为行，k为列标题-->
-          <td v-for="(i,k) in line" :key="k" :class="setCellClass(index,k)">
-            <label v-if="k == 'id'">{{ lines[index][k] }}</label>
-            <img v-else-if="columnType.get(k) == 'string' && validateImage(lines[index][k])"
-                 :src="lines[index][k]" style="width: 55px;height: 55px;"/>
-            <label v-else-if="!lineIsEdit[index]">{{ lines[index][k] }}</label>
-            <input v-else-if="columnType.get(k) == 'string'" type="text" v-model="lines[index][k]"/>
-            <input v-else type="number" class="form-control-sm" v-model="lines[index][k]"/>
-          </td>
-          <td>
-            <i class="typcn typcn-arrow-back-outline" data-toggle="tooltip" title="取消"
-               style="color: var(--primary);font-size: 25px;cursor:pointer;" v-if="lineIsEdit[index]"
-               @click="reverseEditStatus(index)"></i>
-            <i class="typcn typcn-social-vimeo-circular" data-toggle="tooltip"
-               style="color: var(--green);font-size: 25px;cursor:pointer;" title="保存数据"
-               v-if="lineIsEdit[index]" @click="saveRow(lines[index],index)"></i>
-            <i class="typcn typcn-edit" data-toggle="tooltip"
-               style="color: var(--blue);font-size: 25px;cursor:pointer;" title="编辑数据"
-               v-if="!lineIsEdit[index]" @click="reverseEditStatus(index)"></i>
-            <i class="typcn typcn-delete" data-toggle="tooltip"
-               style="color: var(--danger);font-size: 25px;cursor:pointer;" title="删除整行"
-               v-if="!lineIsEdit[index]" @click="deleteRow(lines[index],index)"></i>
-          </td>
-        </tr>
-        </tbody>
-      </table>
+    <div>
+        <hr style="opacity: 0;border-style: none;"/>
+        <button class="btn btn-primary btn-sm" type="button" style="margin-right: 20px;" @click="addRow()">添加</button>
+        <hr style="opacity: 0;border-style: none;"/>
+        <div class="table-responsive">
+            <table class="table table-sm table-striped">
+                <thead>
+                <tr>
+                    <th v-for="(column,index) in columns" :key="index">{{column}}</th>
+                    <th v-if="saveUrl != null && saveUrl != '' && delUrl != null && delUrl != '' ">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr v-for="(line,index) in lines" :key="index" :class="setLineClass(index)">
+                    <!--index为行，k为列标题-->
+                    <td v-for="(i,k) in line" :key="i" :class="setCellClass(index,k)">
+                        <label v-if="k == 'id'">{{lines[index][k]}}</label>
+                        <img v-else-if="columnType.get(k) == 'string' && validateImage(lines[index][k])"
+                             :src="lines[index][k]" style="width: 35px;height: 35px;"/>
+                        <label v-else-if="!lineIsEdit[index]">{{lines[index][k]}}</label>
+                        <input v-else-if="columnType.get(k) == 'string'" type="text" v-model="lines[index][k]"/>
+                        <input v-else type="number" class="form-control-sm" v-model="lines[index][k]"/>
+                    </td>
+
+                    <td v-if="saveUrl != null && saveUrl != '' && delUrl != null && delUrl != '' ">
+                        <i class="typcn typcn-arrow-back-outline" data-toggle="tooltip" title="取消"
+                           style="color: var(--primary);font-size: 25px;cursor:pointer;" v-if="lineIsEdit[index]"
+                           @click="reverseEditStatus(index)"></i>
+                        <i class="typcn typcn-social-vimeo-circular" data-toggle="tooltip"
+                           style="color: var(--green);font-size: 25px;cursor:pointer;" title="保存数据"
+                           v-if="lineIsEdit[index]" @click="saveRow(lines[index],index)"></i>
+                        <i class="typcn typcn-edit" data-toggle="tooltip"
+                           style="color: var(--blue);font-size: 25px;cursor:pointer;" title="编辑数据"
+                           v-if="!lineIsEdit[index]" @click="reverseEditStatus(index)"></i>
+                        <i class="typcn typcn-delete" data-toggle="tooltip"
+                           style="color: var(--danger);font-size: 25px;cursor:pointer;" title="删除整行"
+                           v-if="!lineIsEdit[index]" @click="deleteRow(lines[index],index)"></i>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
-  </div>
 </template>
 
 <script>
-import axios from "axios"
+    import axios from "axios"
 
 export default {
   props: ["dataUrl", "saveUrl", "delUrl", "data","fields"],
