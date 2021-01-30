@@ -21,8 +21,8 @@ export default {
     }
   },
   methods: {
-    valueOfB(data) {
-      this.dataOfb = data
+    valueOfB(data, data1) {
+      this.dataOfb = data + data1
     }
   }
 }

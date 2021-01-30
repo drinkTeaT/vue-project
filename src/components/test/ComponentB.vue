@@ -15,7 +15,7 @@ export default {
   methods: {
     clickButton: function () {
       this.count++
-      this.$emit('mmmmmm', this.count)
+      this.$emit('mmmmmm', this.count,5)
     }
   }
 }
