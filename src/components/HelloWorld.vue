@@ -1,10 +1,20 @@
 <template>
     <div class="hello">
         <!--        https://examples.wenzhixin.net.cn/examples/bootstrap_table/data-->
-        <table-with-edit dataUrl="http://localhost:8088/boss/data/table/job"
-                         del-url="http://localhost:8088/boss/data/table/delete"
-                         save-url="http://localhost:8088/boss/data/table/updateOrInsert"></table-with-edit>
+<!--        <table-with-edit dataUrl="http://localhost:8088/boss/data/table/job"-->
+<!--                         del-url="http://localhost:8088/boss/data/table/delete"-->
+<!--                         save-url="http://localhost:8088/boss/data/table/updateOrInsert"></table-with-edit>-->
         <!--        <simple-table dataUrl="http://localhost:8088/boss/data/table/job"></simple-table>-->
+      头球型
+      <table-with-edit dataUrl = 'http://localhost:8080/pesmaster/show/HEADING_CF'></table-with-edit>
+      速度型
+      <table-with-edit dataUrl = 'http://localhost:8080/pesmaster/show/SPEED_CF'></table-with-edit>
+      坦克型
+      <table-with-edit dataUrl = 'http://localhost:8080/pesmaster/show/TANK_CF'></table-with-edit>
+      终结型
+      <table-with-edit dataUrl = 'http://localhost:8080/pesmaster/show/FINAL_SHOT_CF'></table-with-edit>
+      敏捷型
+      <table-with-edit dataUrl = 'http://localhost:8080/pesmaster/show/SMART_CF'></table-with-edit>
     </div>
 
 </template>
