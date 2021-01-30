@@ -8,7 +8,7 @@
                 <thead>
                 <tr>
                     <th v-for="(column,index) in columns" :key="index">{{column}}</th>
-                    <th>操作</th>
+                    <th v-if="delUrl != null && delUrl != '' && delUrl != null && delUrl != '' ">操作</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -22,7 +22,8 @@
                         <input v-else-if="columnType.get(k) == 'string'" type="text" v-model="lines[index][k]"/>
                         <input v-else type="number" class="form-control-sm" v-model="lines[index][k]"/>
                     </td>
-                    <td>
+
+                    <td v-if="delUrl != null && delUrl != '' && delUrl != null && delUrl != '' ">
                         <i class="typcn typcn-arrow-back-outline" data-toggle="tooltip" title="取消"
                            style="color: var(--primary);font-size: 25px;cursor:pointer;" v-if="lineIsEdit[index]"
                            @click="reverseEditStatus(index)"></i>
@@ -64,7 +65,7 @@
             axios
                 .get(self.$props.dataUrl)
                 .then(function (response) {
-                    let tableDataList = response.data.data;
+                    let tableDataList = response.data.rows;
                     self.columns = new Set();
                     self.lines = new Array();
                     for (let k = 0; k < tableDataList.length; k++) {
