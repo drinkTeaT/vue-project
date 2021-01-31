@@ -47,43 +47,51 @@ export default {
   },
   name: "TableWithPagination",
   created() {
-    const self = this;
-    axios
-        .get(self.$props.url)
-        .then(function (response) {
-          let tableDataList = response.data.data;
-          self.columns = new Set();
-          self.lines = new Array();
-          for (let k = 0; k < tableDataList.length; k++) {
-            let obj = new Object();
-            // obj，一行数据。i为每个格子的列标题，k为行
-            self.cellClassProperties[k] = new Object();
-            for (let i in tableDataList[k]) {
-              // 列去重
-              self.columns.add(i);
-              // 一行数据的单个格子，添加对象属性值即obj[i]
-              obj[i] = tableDataList[k][i];
-              // 自定义cell class规则
-              if (obj[i] < 30) {
-                // // 针对每个格子的值进行样式的判断
-                // self.cellClassProperties[k][i] = "table-danger";
-                // // 由格子的值判断行的样式
-                // self.lineClassProperties[k] = "table-success";
-              }
-            }
-            self.lines[k] = obj;
-          }
-        })
-        .catch(function (e) {
-          console.log(e);
-        })
+    this.queryData()
   },
   methods: {
     setCellClass: function (r, c) {
       return this.cellClassProperties[r][c];
     },
-    setLineClass:function (r) {
+    setLineClass: function (r) {
       return this.lineClassProperties[r];
+    },
+    queryData: function () {
+      const self = this;
+      axios
+          .get(self.$props.url)
+          .then(function (response) {
+            let tableDataList = response.data.data;
+            self.columns = new Set();
+            self.lines = new Array();
+            for (let k = 0; k < tableDataList.length; k++) {
+              let obj = new Object();
+              // obj，一行数据。i为每个格子的列标题，k为行
+              self.cellClassProperties[k] = new Object();
+              for (let i in tableDataList[k]) {
+                // 列去重
+                self.columns.add(i);
+                // 一行数据的单个格子，添加对象属性值即obj[i]
+                obj[i] = tableDataList[k][i];
+                // 自定义cell class规则
+                if (obj[i] < 30) {
+                  // // 针对每个格子的值进行样式的判断
+                  // self.cellClassProperties[k][i] = "table-danger";
+                  // // 由格子的值判断行的样式
+                  // self.lineClassProperties[k] = "table-success";
+                }
+              }
+              self.lines[k] = obj;
+            }
+          })
+          .catch(function (e) {
+            console.log(e);
+          })
+    }
+  },
+  watch: {
+    data: function () {
+      this.queryData()
     }
   }
 }
