@@ -51,16 +51,48 @@
                       style="font-size: 12px;margin-right: 10px;">状态持续<input type="number"
                                                                              class="form-control form-control-sm"
                                                                              v-model="form"
-                                                                             step="1"/></label><label
-                      style="font-size: 12px;margin-right: 10px;">评分<input type="number"
-                                                                           class="form-control form-control-sm"
-                                                                           v-model="score" step="1"/></label><label
-                      style="font-size: 12px;margin-right: 10px;">等级<input type="number"
-                                                                           class="form-control form-control-sm"
-                                                                           v-model="level" step="1"/></label><label
-                      style="font-size: 12px;margin-right: 10px;">url<input type="text"
-                                                                            class="form-control form-control-sm"
-                                                                            v-model="url"/></label></form>
+                                                                             step="1"/></label>
+                    <label style="font-size: 12px;margin-right: 10px;">易受伤等级<input type="number"
+                                                                                   class="form-control form-control-sm"
+                                                                                   v-model="injuryResistance"
+                                                                                   step="1"/></label><label
+                        style="font-size: 12px;margin-right: 10px;">评分<input type="number"
+                                                                             class="form-control form-control-sm"
+                                                                             v-model="score" step="1"/></label><label
+                        style="font-size: 12px;margin-right: 10px;">等级<input type="number"
+                                                                             class="form-control form-control-sm"
+                                                                             v-model="level" step="1"/></label><label
+                        style="font-size: 12px;margin-right: 10px;">url<input type="text"
+                                                                              class="form-control form-control-sm"
+                                                                              v-model="url"/></label>
+                    <label style="font-size: 12px;margin-right: 10px;">风格<select class="form-control form-control-sm"
+                                                                                 v-model="style">
+                      <optgroup label>
+                        <option value>全部</option>
+                        <option value="-">无风格</option>
+                        <option value="Anchor Man">Anchor Man</option>
+                        <option value="Box-to-Box">Box-to-Box</option>
+                        <option value="Build Up">Build Up</option>
+                        <option value="Classic No. 10">Classic No. 10</option>
+                        <option value="Creative Playmaker">Creative Playmaker</option>
+                        <option value="Cross Specialist">Cross Specialist</option>
+                        <option value="Defensive Full-back">Defensive Full-back</option>
+                        <option value="Defensive Goalkeeper">Defensive Goalkeeper</option>
+                        <option value="Dummy Runner">Dummy Runner</option>
+                        <option value="Extra Frontman">Extra Frontman</option>
+                        <option value="Fox in the Box">Fox in the Box</option>
+                        <option value="Full-back Finisher">Full-back Finisher</option>
+                        <option value="Goal Poacher">Goal Poacher</option>
+                        <option value="Hole Player">Hole Player</option>
+                        <option value="Offensive Full-back">Offensive Full-back</option>
+                        <option value="Offensive Goalkeeper">Offensive Goalkeeper</option>
+                        <option value="Orchestrator">Orchestrator</option>
+                        <option value="Prolific Winger">Prolific Winger</option>
+                        <option value="Roaming Flank">Roaming Flank</option>
+                        <option value="Target Man">Target Man</option>
+                        <option value="The Destroyer">The Destroyer</option>
+                      </optgroup>
+                    </select></label></form>
                 </div>
               </div>
               <div class="row">
@@ -280,10 +312,11 @@ export default {
       age: "",
       height: "",
       weight: "",
-      form: "5",
+      form: "",
       score: "",
       level: "14",
       url: "",
+      style: "",
       offensiveAwareness: "",
       finishing: "",
       kickingPower: "",
@@ -294,6 +327,7 @@ export default {
       heading: "",
       jump: "",
       placeKicking: "",
+      injuryResistance: "",
       curl: "",
       defensiveAwareness: "",
       ballWinning: "",
@@ -326,7 +360,9 @@ export default {
         form: this.form,
         score: this.score,
         level: this.level,
+        injuryResistance: this.injuryResistance,
         url: this.url,
+        style: this.style,
         offensiveAwareness: this.offensiveAwareness,
         finishing: this.finishing,
         kickingPower: this.kickingPower,
