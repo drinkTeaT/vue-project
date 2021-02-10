@@ -3,13 +3,13 @@
 
 
     头球型后卫
-    <table-with-edit dataUrl = 'http://localhost:8080/pesmaster/show/HEADING_CB'></table-with-edit>
+    <table-with-edit dataUrl = 'http://pes.tacbin.club/pesmaster/show/HEADING_CB'></table-with-edit>
 
     防守型后卫
-    <table-with-edit dataUrl = 'http://localhost:8080/pesmaster/show/DEFENDING_CB'></table-with-edit>
+    <table-with-edit dataUrl = 'http://pes.tacbin.club/pesmaster/show/DEFENDING_CB'></table-with-edit>
 
     传中后卫
-    <table-with-edit dataUrl = 'http://localhost:8080/pesmaster/show/CROSSING_CB'></table-with-edit>
+    <table-with-edit dataUrl = 'http://pes.tacbin.club/pesmaster/show/CROSSING_CB'></table-with-edit>
   </div>
 
 </template>

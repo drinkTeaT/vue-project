@@ -2,7 +2,7 @@
   <div class="hello">
 
     <QueryPes @sendToTable="getQueryJson"></QueryPes>
-    <table-with-edit dataUrl='http://localhost:8080/pesmaster/advanced-show'
+    <table-with-edit dataUrl='http://pes.tacbin.club/pesmaster/advanced-show'
                      :data=queryJson :fieldMap=fieldMap></table-with-edit>
 
   </div>

@@ -4,7 +4,7 @@ import router from '@/route'
 import 'bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'typicons.font'
-
+import 'datatables.net-dt/'
 Vue.config.productionTip = false
 
 new Vue({

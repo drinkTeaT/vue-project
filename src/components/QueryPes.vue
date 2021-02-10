@@ -200,6 +200,68 @@
                   </form>
                 </div>
               </div>
+              <div class="row" style="margin-bottom: 15px;">
+                <div class="col"><label style="color: var(--blue);">技能:</label>
+                  <form>
+                    <div class="form-row">
+                      <div class="col"><label class="col-form-label" style="font-size: 12px;"><select
+                          class="form-control form-control-sm" style="font-size: 14px;" v-model="skill">
+                        <optgroup label>
+                          <option value selected>不限</option>
+                          <option value="-">技能待学习</option>
+                          <option value="Acrobatic Clear">杂技般解围(凌空解围)</option>
+                          <option value="Acrobatic Finishing">杂技般进球(凌空射门)</option>
+                          <option value="Captaincy">队长</option>
+                          <option value="Chip Shot Control">吊射</option>
+                          <option value="Cross Over Turn">压步转弯</option>
+                          <option value="Cut Behind &amp; Turn">向后切球并转身</option>
+                          <option value="Dipping Shot">插入射门</option>
+                          <option value="Double Touch">双触</option>
+                          <option value="Fighting Spirit">战斗精神</option>
+                          <option value="First-time Shot">接球并射门</option>
+                          <option value="Flip Flap">牛尾巴</option>
+                          <option value="Gamesmanship">蛊惑招</option>
+                          <option value="GK High Punt">守门员踢高球</option>
+                          <option value="GK Long Throw">守门员长距离投掷</option>
+                          <option value="GK Low Punt">守门员踢低球</option>
+                          <option value="GK Penalty Saver">守门员扑点球</option>
+                          <option value="Heading">头球精度</option>
+                          <option value="Heel Trick">脚后跟绝技</option>
+                          <option value="Interception">拦截</option>
+                          <option value="Knuckle Shot">落叶球射门</option>
+                          <option value="Long Range Drive">远距离搓射</option>
+                          <option value="Long Range Shooting">远距离射门</option>
+                          <option value="Long Throw">大力手抛球</option>
+                          <option value="Low Lofted Pass">低空(弧线)传球</option>
+                          <option value="Man Marking">盯人(高级设置里触发)</option>
+                          <option value="Marseille Turn">马赛回旋</option>
+                          <option value="No Look Pass">不看球传球</option>
+                          <option value="One-touch Pass">单触传球</option>
+                          <option value="Outside Curler">外脚背传球或射门</option>
+                          <option value="Penalty Specialist">点球专家</option>
+                          <option value="Pinpoint Crossing">精确(弧线)横传</option>
+                          <option value="Rabona">插花脚进行射门，传球，横传</option>
+                          <option value="Rising Shots">截击射门，球先低轨迹后升高</option>
+                          <option value="Scissors Feint">高速剪刀脚</option>
+                          <option value="Scotch Move">内部弹起</option>
+                          <option value="Sombrero">挑球</option>
+                          <option value="Step On Skill control">踏球控制</option>
+                          <option value="Super-sub">超级候补</option>
+                          <option value="Through Passing">直塞球</option>
+                          <option value="Track Back">压迫,前锋球员回追抢球</option>
+                          <option value="Weighted Pass">加重传球，精准传球</option>
+                        </optgroup>
+                      </select></label></div>
+                    </div>
+                    <div class="form-row justify-content-start"><span
+                        v-for="(skill,index) in skills" :key="index"
+                        class="badge badge-primary" data-toggle="tooltip"
+                        style="margin-right: 5px;margin-left: 5px;cursor:pointer;"
+                        title="移除" @click="clear(index)">{{ skill }}</span>
+                    </div>
+                  </form>
+                </div>
+              </div>
               <div class="row">
                 <div class="col"><label style="color: var(--blue);">排序:</label>
                   <form><label style="font-size: 12px;margin-right: 10px;">字段排序:<select
@@ -347,7 +409,14 @@ export default {
       order2: "T2.SCORE",
       sort1: "DESC",
       sort2: "DESC",
+      skill: "",
+      skills: []
     };
+  },
+  watch: {
+    skill: function () {
+      this.skills.push(this.skill)
+    }
   },
   methods: {
     search: function () {
@@ -391,9 +460,13 @@ export default {
         currentPage: 1,
         pageSize: 100,
         orderBy: this.order1 + " " + this.sort1 + "," + this.order2 + " " + this.sort2,
+        skills: this.skills
       }
       let jsonText = JSON.stringify(queryJson);
       this.$emit('sendToTable', jsonText)
+    },
+    clear: function (index) {
+      this.skills.splice(index, 1)
     }
   }
 }
